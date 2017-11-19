@@ -47,15 +47,31 @@ public class WeixinServlet extends HttpServlet {
 			String content = map.get("Content");
 			
 			String message = null;
-			if("text".equals(msgType)){
-				textMessage text = new textMessage();
-				text.setFromUserName(toUserName);
-				text.setToUserName(fromUserName);
-				text.setMsgType("text");
-				text.setCreateTime(new Date().getTime());
-				text.setContent("您发送的消息是： "+content);
-				message = MessageUtil.textMessageToXml(text);
+			if(MessageUtil.MESSAGE_TEXT.equals(msgType)){
+				if("1".equals(content)){
+					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.firstMenu());
+				}else if("2".equals(content)){
+					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.secondMenu());
+
+				}else if("?".equals(content)||"？".equals(content)){
+					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.menuText());
+				}
+				
+//				textMessage text = new textMessage();
+//				text.setFromUserName(toUserName);
+//				text.setToUserName(fromUserName);
+//				text.setMsgType("text");
+//				text.setCreateTime(new Date().getTime());
+//				text.setContent("您发送的消息是： "+content);
+//				message = MessageUtil.textMessageToXml(text);
+			}else if (MessageUtil.MESSAGE_EVENT.equals(msgType)) {
+				String eventType = map.get("Event");
+				if(MessageUtil.MESSAGE_SUBSCRIBE.equals(eventType)){
+					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.menuText());
+				}
 			}
+			System.out.println(message);
+			
 			out.print(message);
 		}catch(DocumentException e){
 			e.printStackTrace();
