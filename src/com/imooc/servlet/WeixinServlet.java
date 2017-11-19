@@ -3,6 +3,7 @@ package com.imooc.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -18,6 +19,15 @@ import com.imooc.util.CheckUtil;
 import com.imooc.util.MessageUtil;
 
 public class WeixinServlet extends HttpServlet {
+	HashSet<String> userName = new HashSet<String>();
+	
+	public WeixinServlet() {
+		userName.add("张楠");
+		userName.add("刘池莉");
+		userName.add("周辉");
+		userName.add("许姚三川");
+	}
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
 			throws ServletException, IOException {
@@ -48,14 +58,16 @@ public class WeixinServlet extends HttpServlet {
 			
 			String message = null;
 			if(MessageUtil.MESSAGE_TEXT.equals(msgType)){
-				if("1".equals(content)){
-					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.firstMenu());
-				}else if("2".equals(content)){
-					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.secondMenu());
-
-				}else if("?".equals(content)||"？".equals(content)){
-					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.menuText());
+				if(userName.contains(content)){
+					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.sayHello(content));
+				}else{
+					String greeting = "初次见面，幸会幸会";
+					userName.add(content);
+					message = MessageUtil.initText(toUserName, fromUserName, greeting);
 				}
+//				else if("?".equals(content)||"？".equals(content)){
+//					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.menuText());
+//				}
 				
 //				textMessage text = new textMessage();
 //				text.setFromUserName(toUserName);

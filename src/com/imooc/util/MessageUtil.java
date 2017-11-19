@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -82,11 +83,30 @@ public class MessageUtil {
 	 */
 	public static String menuText(){
 		StringBuffer sb = new StringBuffer();
-		sb.append("欢迎您的关注，请按照菜单提示进行操作：\n\n");
-		sb.append("1，课程介绍\n");
-		sb.append("2，慕课网介绍\n\n");
-		sb.append("回复？调出菜单。");
+		sb.append("欢迎您的关注，我们会有一些有意思的操作：\n\n");
+		sb.append("请输入您的名字，看我认不认识\n");
+//		sb.append("2，慕课网介绍\n\n");
+//		sb.append("回复？调出菜单。");
 		return sb.toString();
+	}
+	
+	public static String sayHello(String content){
+		String[] helloBox = new String[]{
+				"哼，我不仅认识你，我还知道你的很多小秘密，比如上洗手间从来不洗手。",
+				"在我心目中，你除了学习，就没啥不良癖好了",
+				"我认识你的时间不长，但我知道你就是一个渣男/腐女[奸笑]",
+				"久仰大名，如雷贯耳[无语]",
+				"你好，我们只是泛泛之交，用不着加微信吧",
+				"哦，"+content+",我想起来了，你是隔壁王叔叔家的孩子？",
+				content+"，我有好多话想对你说，还是下次再说吧",
+				"执手相看泪眼，竟无语凝噎",
+				content+"，你老是说我，我要打死你",
+				"啥，今天刘池莉又长胖了？",
+				"严哥来了，严哥来了"
+		};
+//		Random random = new Random();
+		int s = (int)(System.currentTimeMillis()%10);
+		return helloBox[s];
 	}
 	
 	public static String firstMenu(){
