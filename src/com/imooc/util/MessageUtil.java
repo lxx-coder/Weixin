@@ -3,6 +3,7 @@ package com.imooc.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,12 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.dom4j.*;
 import org.dom4j.io.SAXReader;
 
+import com.imooc.po.News;
+import com.imooc.po.NewsMessage;
 import com.imooc.po.textMessage;
 import com.thoughtworks.xstream.XStream;
 
 public class MessageUtil {
 	
 	public static final String MESSAGE_TEXT = "text";
+	public static final String MESSAGE_NEWS = "news";
 	public static final String MESSAGE_IMAGE = "image";
 	public static final String MESSAGE_VOICE = "voice";
 	public static final String MESSAGE_VIDEO = "video";
@@ -98,7 +102,7 @@ public class MessageUtil {
 				"久仰大名，如雷贯耳[无语]",
 				"你好，我们只是泛泛之交，用不着加微信吧",
 				"哦，"+content+",我想起来了，你是隔壁王叔叔家的孩子？",
-				content+"，我有好多话想对你说，还是下次再说吧",
+				content+"，你听我解释，我真的没有做出对不起你的事",
 				"执手相看泪眼，竟无语凝噎",
 				content+"，你老是说我，我要打死你",
 				"啥，今天刘池莉又长胖了？",
@@ -106,7 +110,7 @@ public class MessageUtil {
 		};
 //		Random random = new Random();
 		int s = (int)(System.currentTimeMillis()%10);
-		return helloBox[s];
+		return "我认识"+content+"\n"+helloBox[s];
 	}
 	
 	public static String firstMenu(){
@@ -121,5 +125,47 @@ public class MessageUtil {
 				+ "包括基础课程、实用案例、高级分享三大类型，适合不同阶段的学习人群。"
 				+ "以纯干货、短视频的形式为平台特点，为在校学生、职场白领提供了一个迅速提升技能、共同分享进步的学习平台。");
 		return sb.toString();
+	}
+	/**
+	 * 将图文消息对象转换为xml
+	 * @param newsMessage
+	 * @return
+	 */
+	public static String newsMessageToXml(NewsMessage newsMessage){
+		XStream xstream = new XStream();
+		xstream.alias("xml", newsMessage.getClass());
+		xstream.alias("item", new News().getClass());
+		return xstream.toXML(newsMessage);		
+	}
+	
+	/**
+	 * 图文消息的组装
+	 * @param toUserName
+	 * @param fromUserName
+	 * @return
+	 */
+	public static String initNewsMessage(String toUserName,String fromUserName){
+		String message = null;
+		List<News> newsList = new ArrayList<News>();
+		NewsMessage newsMessage = new NewsMessage();
+		
+		News news = new News();
+		news.setTitle("慕课网介绍");
+		news.setDescription("慕课网课程涵盖前端开发、PHP、Html5、Android、iOS、Swift等IT前沿技术语言");
+		news.setPicUrl("http://lxxcoder.imwork.net/Weixin/image/imooc.jpg");
+		news.setUrl("www.imooc.com");
+		
+		newsList.add(news);
+		
+		newsMessage.setToUserName(fromUserName);
+		newsMessage.setFromUserName(toUserName);
+		newsMessage.setCreateTime(new Date().getTime());
+		newsMessage.setMsgType(MESSAGE_NEWS);
+		newsMessage.setArticles(newsList);
+		newsMessage.setArticleCount(newsList.size());
+		
+		message = newsMessageToXml(newsMessage);
+		return message;
+		
 	}
 }

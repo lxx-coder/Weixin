@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.jasper.tagplugins.jstl.core.Out;
+//import org.apache.jasper.tagplugins.jstl.core.Out;
 import org.dom4j.DocumentException;
 
 import com.imooc.po.textMessage;
@@ -58,7 +58,9 @@ public class WeixinServlet extends HttpServlet {
 			
 			String message = null;
 			if(MessageUtil.MESSAGE_TEXT.equals(msgType)){
-				if(userName.contains(content)){
+				if("图文消息".equals(content)){
+					message = MessageUtil.initNewsMessage(toUserName, fromUserName);
+				}else if(userName.contains(content)){
 					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.sayHello(content));
 				}else{
 					String greeting = "初次见面，幸会幸会";
