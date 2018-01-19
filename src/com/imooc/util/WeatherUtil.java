@@ -2,6 +2,7 @@ package com.imooc.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+<<<<<<< HEAD
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -35,6 +36,14 @@ public class WeatherUtil {
 	}
 	
 	private static String sendGet (String url,String param){
+=======
+import java.net.URL;
+import java.net.URLConnection;
+
+public class WeatherUtil {
+	
+	public static String sendGet (String url,String param){
+>>>>>>> 094a307056f0098bfabdb86318c015584d788dd8
 		String result = "";
 		BufferedReader in = null;
 		try{

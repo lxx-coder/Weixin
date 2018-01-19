@@ -3,7 +3,6 @@ package com.imooc.util;
 import java.io.IOException;
 
 import org.apache.http.HttpEntity;
-//import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
@@ -75,9 +74,17 @@ public class WeixinUtil {
 		String url = ACCESS_TOKEN_URL.replace("APPID", APPID).replace("APPSECRET", APPSECRET);
 		JSONObject jsonObject = doGetStr(url);
 		if(jsonObject != null){
-			token.setToken(jsonObject.getString("access_token"));
-			token.setExpiresIn(jsonObject.getInt("expires_in"));
+			try{
+				
+				token.setToken(jsonObject.getString("access_token"));
+				token.setExpiresIn(jsonObject.getInt("expires_in"));
+			}catch(Exception e){
+				System.err.println("errcode:"+jsonObject.getString("errcode")+
+						",errmsg"+jsonObject.getString("errmsg"));
+				System.exit(0);
+			}
 		}
+		
 		return token;
 	}
 }

@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 public class CheckUtil {
-	private static final String token = "imooc";
+	private static final String token = "weixin";
 	public static boolean checkSignature(String signature,
 			String timestamp,String nonce){
 		String[] arr = new String[]{token,timestamp,nonce};
