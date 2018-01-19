@@ -3,6 +3,7 @@ package com.imooc.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -17,9 +18,12 @@ import org.dom4j.DocumentException;
 import com.imooc.po.textMessage;
 import com.imooc.util.CheckUtil;
 import com.imooc.util.MessageUtil;
+import com.imooc.util.WeatherUtil;
 
 public class WeixinServlet extends HttpServlet {
 	HashSet<String> userName = new HashSet<String>();
+	//Integer value: 1--weather
+	HashMap<String, Integer> flag = new HashMap<String, Integer>();
 	
 	public WeixinServlet() {
 		userName.add("张楠");
@@ -57,9 +61,21 @@ public class WeixinServlet extends HttpServlet {
 			String content = map.get("Content");
 			
 			String message = null;
-			if(MessageUtil.MESSAGE_TEXT.equals(msgType)){
-				if("图文消息".equals(content)){
-					message = MessageUtil.initNewsMessage(toUserName, fromUserName);
+			if(flag.containsKey(fromUserName)){
+				if("天气".equals(content) || "weather".equalsIgnoreCase(content)){
+					flag.put(fromUserName, 1);
+					message = "请输入城市:";
+				}else if("退出".equals(content) || "exit".equals(content)){
+					flag.remove(fromUserName);
+				}else{
+					message = WeatherUtil.getWeather(content);
+				}
+			}else if(MessageUtil.MESSAGE_TEXT.equals(msgType)){
+//				if("图文消息".equals(content)){
+//					message = MessageUtil.initNewsMessage(toUserName, fromUserName);
+				if("天气".equals(content) || "weather".equalsIgnoreCase(content)){
+					flag.put(fromUserName, 1);
+					message = "请输入城市:";
 				}else if(userName.contains(content)){
 					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.sayHello(content));
 				}else{
@@ -67,10 +83,6 @@ public class WeixinServlet extends HttpServlet {
 					userName.add(content);
 					message = MessageUtil.initText(toUserName, fromUserName, greeting);
 				}
-//				else if("?".equals(content)||"？".equals(content)){
-//					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.menuText());
-//				}
-				
 //				textMessage text = new textMessage();
 //				text.setFromUserName(toUserName);
 //				text.setToUserName(fromUserName);
@@ -92,6 +104,5 @@ public class WeixinServlet extends HttpServlet {
 		}finally{
 			out.close();
 		}
-			
 	}
 }
