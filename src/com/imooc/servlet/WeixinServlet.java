@@ -64,18 +64,19 @@ public class WeixinServlet extends HttpServlet {
 			if(flag.containsKey(fromUserName)){
 				if("天气".equals(content) || "weather".equalsIgnoreCase(content)){
 					flag.put(fromUserName, 1);
-					message = "请输入城市:";
+					message = MessageUtil.initText(toUserName, fromUserName, "请输入城市：");
 				}else if("退出".equals(content) || "exit".equals(content)){
 					flag.remove(fromUserName);
 				}else{
-					message = WeatherUtil.getWeather(content);
+					String weatherContent = WeatherUtil.getWeather(content);
+					message = MessageUtil.initText(toUserName, fromUserName, weatherContent);
 				}
 			}else if(MessageUtil.MESSAGE_TEXT.equals(msgType)){
 //				if("图文消息".equals(content)){
 //					message = MessageUtil.initNewsMessage(toUserName, fromUserName);
 				if("天气".equals(content) || "weather".equalsIgnoreCase(content)){
 					flag.put(fromUserName, 1);
-					message = "请输入城市:";
+					message = MessageUtil.initText(toUserName, fromUserName, "请输入城市：");
 				}else if(userName.contains(content)){
 					message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.sayHello(content));
 				}else{
